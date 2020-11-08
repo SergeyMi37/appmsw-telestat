@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25">
+<Document name="appmsw-telestat.ZPM">
+<Module>
+<Name>appmsw-telestat</Name>
+<Version>1.0.0</Version>
+<Description>Telegram bots platform for informing and notifying</Description>
+<Packaging>module</Packaging>
+<SourcesRoot>src</SourcesRoot>
+<Invokes>
+<Invoke Class="appmsw.telestat.API.util" Method="Init"></Invoke>
+</Invokes>
+<Resource Name="appmsw.telestat.PKG"/>
+</Module>
+</Document>
+</Export>
