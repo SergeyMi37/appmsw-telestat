@@ -1,4 +1,4 @@
-![](https://github.com/SergeyMi37/appmsw-telestat/blob/master/doc/hammer-blue.png)
+![](https://github.com/SergeyMi37/appmsw-telestat/blob/master/doc/appmsw-telestat.png)
 ## appmsw-telestat
 [![Gitter](https://img.shields.io/badge/Available%20on-Intersystems%20Open%20Exchange-00b2a9.svg)](https://openexchange.intersystems.com/package/appmsw-telestat-1)
 
