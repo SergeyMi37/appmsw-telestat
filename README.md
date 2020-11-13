@@ -4,6 +4,11 @@
 
 Ineroperability manages a Telegram Admin_bot and Informant_bot in providing content.
 
+Telestat solution based on project
+https://github.com/intersystems-community/TelegramAlerts
+
+During the installation and configuration process, we will create an informant bot and an admin bot, which will allow the informant bot to provide users with the requested content.
+
 ## Installation with ZPM
 
 zpm:USER>install appmsw-telestat
@@ -30,13 +35,20 @@ $ docker-compose build
 
 ```
 $ docker-compose up -d
+$ docker-compose exec iris iris session iris
 ```
 
-## How to Test it
+## Before starting the installation
+
+If you do not have a Telegram messenger account, then this is just a reason to create it.
+So, let's create an administrator bot answering the questions of the Father of Bots
+![](https://github.com/SergeyMi37/appmsw-telestat/blob/main/doc/appmsw-tele.png)
+
+
 Open IRIS terminal:
 
 ```
-$ docker-compose exec iris iris session iris
+
 USER>
 USER>zpm
 zpm:USER>install appmsw-telestat
