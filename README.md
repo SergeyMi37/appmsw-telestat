@@ -82,7 +82,7 @@ After that, we will open the product and launch it.
 
 ## Configuring a bot admin
 
-Find the created admin bot in Telegram, connect to it and execute the command /start
+Find the created admin bot in Telegram, connect to it and execute the command `/start`
 And we will show him our phone number. Exactly the one that we entered during the installation.
 If all is well, we will receive a message:
 `Your number has been successfully accepted OK`
@@ -98,7 +98,7 @@ user>zwrite ##class(appmsw.telestat.API.util).ToAdmin("Contest")
 ![](https://github.com/SergeyMi37/appmsw-telestat/blob/main/doc/Screenshot_8.png)
 
 ## Configuring a bot informant
-We will find the informant in the telegram created by the bot and connect to it by pressing the START button.
+We will find the informant in the telegram created by the bot and connect to it by pressing the `START` button.
 The product service will prepare a message and also offer to show the phone number.
 
 The bot admin will receive a message about sending the phone, and by selecting the Allow or Deny buttons, you will make a decision that will come in response to the bot informant.
@@ -111,7 +111,7 @@ user>zwrite ##class(appmsw.telestat.API.util).ToInformer("7971111111",,,"Hello d
 ```
 ## The configuration work has been completed and you can see what is available out of the box.
 
-For bot admin, if you enter /start
+For bot admin, if you enter `/start`
 ```
 iris informer example admin
 Bot administration service for tracking Ensemble and IRIS servers. Can take commands: 
@@ -131,3 +131,7 @@ Another command /GetLastAlerts is implemented more as an example.
 And the `appmsw.telestat.TelegramServiceAlert` service is configured to periodically check system messages and if their level of importance is more than 2, display them to all users connected to the bot informant who have the notification field set to `yes`
 
 ![](https://github.com/SergeyMi37/appmsw-telestat/blob/main/doc/Screenshot_6.png)
+
+The list of commands and content is expanding. It is enough to create your own class similar to `appmsw.telestat.API.commands` And a method `GetCommands` For a list of commands and `GetAlerts` To get content on them.
+
+Teams and content can be differentiated between users by groups.
