@@ -11,6 +11,7 @@
 <Invoke Class="appmsw.telestat.API.util" Method="Init"></Invoke>
 </Invokes>
 <Resource Name="appmsw.telestat.PKG"/>
+<SystemRequirements Version=">=2019.1" Interoperability="enabled" />
 </Module>
 </Document>
 </Export>
