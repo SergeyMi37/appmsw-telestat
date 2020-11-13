@@ -41,11 +41,13 @@ $ docker-compose exec iris iris session iris
 ## Before starting the installation
 
 If you do not have a Telegram messenger account, then this is just a reason to create it.
-So, let's create an administrator bot answering the questions of the Father of Bots
+So, let's create an administrator bot answering the questions of the BotsFather.
+
 ![](https://github.com/SergeyMi37/appmsw-telestat/blob/main/doc/Screenshot_1.png)
+
 Then we will create an informant bot and save their names and tokens to enter when installing the module using the package manager.
 
-Open IRIS terminal:
+### Open IRIS terminal:
 
 ```
 USER>
@@ -73,7 +75,23 @@ Product items changed successfully
 [appmsw-telestat]       Configure SUCCESS
 [appmsw-telestat]       Activate SUCCESS
 ```
+After that, we will open the product and launch it.
 
+![](https://github.com/SergeyMi37/appmsw-telestat/blob/main/doc/Screenshot_7.png)
 
+Find the created admin bot in Telegram, connect to it and execute the command /start
+
+And we will show him our phone number. Exactly the one that we entered during the installation.
+
+If all is well, we will receive a message:
+Your number has been successfully accepted OK
+ 
+otherwise:
+Your number is not included in the allowed table. Check the correctness of the initial data
+
+Now ChatId is attached to the administrator's phone.
+You can test notifications to the Admin bot with a command in the terminal
+
+user>zwrite ##class(appmsw.telestat.API.service).ToAdmin("Contest")
 
 
