@@ -11,7 +11,7 @@ ClassMethod IsPermiss(token, ChatId, phone = "0") As %Status
 	if phone {
 		set obj=##class(appmsw.telestat.Bots).GetObjByNumber(phone)
 		if $isobject(obj) {
-			if obj.ChatId=ChatId,obj.TelegramToken=token Quit obj.Allow
+			if obj.ChatId=ChatId,obj.TelegramToken=token Quit $E(obj.Access,1)="Y"
 			else  Quit 0
 		} else {
 			Quit "0"			
@@ -19,7 +19,7 @@ ClassMethod IsPermiss(token, ChatId, phone = "0") As %Status
 	} else {
 		set obj=##class(appmsw.telestat.Bots).GetObjByChatId(ChatId,token)
 		if $isobject(obj) {
-			Quit obj.Allow
+			Quit $E(obj.Access,1)="Y"
 		} else {
 			Quit "0"			
 		}
@@ -27,7 +27,7 @@ ClassMethod IsPermiss(token, ChatId, phone = "0") As %Status
 	}
 }
 
-ClassMethod GetMessage(token, pInput As %RegisteredObject, Output msg) As %Status
+ClassMethod InitMessage(pInput As %RegisteredObject, Token, Output msg, ChatId, NameFirst, NameLast, IsAdmin = "") As %Status
 {
     set msg = ##class(appmsw.telestat.Msg.TextRequest).%New()
     set ChatId = pInput.message.chat.id ;user chat id
@@ -35,10 +35,19 @@ ClassMethod GetMessage(token, pInput As %RegisteredObject, Output msg) As %Statu
 
     set NameFirst=pInput.message.from."first_name"
     set NameLast=pInput.message.from."last_name"
+	if '$D(@..#GNtmp@("Users"_IsAdmin,ChatId)) set @..#GNtmp@("Users",ChatId)=$LB(NameFirst,NameLast)
+	if $I(@..#GNtmp@("Users"_IsAdmin,ChatId,"count")) //for statistic
+	set st=##class(appmsw.telestat.Bots).IncNumCommSent(Token,ChatId)
+	Quit $$$OK
+}
+
+ClassMethod GetMessage(token, pInput As %RegisteredObject, Output msg) As %Status
+{
+	d ..InitMessage(pInput,token,.msg, .ChatId,.NameFirst,.NameLast)	
+	
 	Try {
 		do ##class(appmsw.telestat.API.commands).GetCommands(.cmd,ChatId,token,NameFirst,NameLast)
-		set GNtmp=..#GNtmp
-
+		
 		set Text = ""
 		if pInput.message.text="/start" {
 			set Text = $GET(cmd)_$$$NL
@@ -65,18 +74,23 @@ ClassMethod GetMessage(token, pInput As %RegisteredObject, Output msg) As %Statu
 				//response to command for currently user
 				set msg.Text=Text_"Response to command:"
 				
+				;m ^tmp($i(^tmp),"Merge2")=cmd
+				;m ^tmp($i(^tmp),"Merge3")=@..#GNtmp@("Command",ChatId)
+				
 				if $GET(cmd(comm))'="" set command=$GET(cmd(comm))
-				else  set command=$GET(@GNtmp@("Command",comm))
-				if command="" set msg.Text="Error node comman" quit
+				else  set command=$GET(@..#GNtmp@("Command",ChatId,comm))
+				if command="" set msg.Text="Error node command" quit
+				
+				;s ^tmp($i(^tmp),"set")=$lg(command,3)
 				
 				Try {
-	  			  if $lg(command,3)'="" xecute "do "_$lg(command,3) //routine TODO
-	  			  else  do $classmethod($lg(command,1),$lg(command,2),.return,command,ChatId,token,NameFirst,NameLast)
+	  			  if $lg(command,5)'="" xecute "do "_$lg(command,5) //routine TODO
+	  			  else  do $classmethod($lg(command,1),$lg(command,2),$lg(command,3),.return,command,ChatId,token,NameFirst,NameLast)
 	  			  set msg.Text=Text_$GET(return)_$$$NL
 				} Catch ex {
-				   Set sc = $g(%objlasterror, $$$OK)
-				   Set sc = $$$ADDSC(sc, ex.AsStatus())
-				   set msg.Text=Text_"Error code "_ex.Code_$$$NL
+				   ;Set sc = $g(%objlasterror, $$$OK)
+				   ;Set sc = $$$ADDSC(sc, ex.AsStatus())
+				   set msg.Text=Text_"Error code "_$ZE_$$$NL
 				 }
 			}
 		}
@@ -87,13 +101,14 @@ ClassMethod GetMessage(token, pInput As %RegisteredObject, Output msg) As %Statu
 			// Place the number in the database and tell the admin that they are asking for permission
 			if '..IsPermiss(token,ChatId,phone) { //not allowed yet - permission denied
 				set msg.Text = "Your number has been accepted. A confirmation from the administrator about permission to receive information on servers is awaiting"
-				set from=NameFirst_" "_NameLast_" +"_phone
 				
+				set from=NameFirst_" "_NameLast_" +"_phone
 				//We use the global node to save and transfer private information between information exchange sessions
 				set GNtmp=..#GNtmp
-				set gnId=$i(@GNtmp@("Admin"))
-				set @GNtmp@("Admin",gnId)=$lb($h,token,ChatId,phone,NameFirst,NameLast)
-				do ##class(appmsw.telestat.API.util).ToAdmin(" Request for access to information from "_from,"=Allow "_from_"("_gnId_"),=Deny "_from_"("_gnId_")")
+				set gnId=$i(@..#GNtmp@("Admin"))
+				set @..#GNtmp@("Admin",gnId)=$lb($h,token,ChatId,phone,NameFirst,NameLast)
+				set butt="=Access:Yes("_gnId_"),=Access:Deny("_gnId_")"
+				do ##class(appmsw.telestat.API.util).ToAdmin(" Request for access to information from "_from,butt)
 			} else {		
 				//if you have permission
 				set msg.Text = "Confirmation received from the administrator about permission to receive information on servers"

@@ -111,45 +111,6 @@ ClassMethod CheckSSLCertificate(name) As %String
   QUIT name
 }
 
-/// ^^^zw ##class(appmsw.telestat.API.service).SendMsg("7504026852","System test")
-ClassMethod SendMsg(phoneNumber = "", msg = "Test") As %Status
-{
-	if ChatId="0" {
-		s i="" for { s i=$o(@..#GN@(i)) q:i=""
-			i $g(@..#GN@(i,"allow")) {
-				// ???
-				do ..Send(i,msg) 
-				;s phone=$lg(@..#GN@(i),3)
-				;s:phone'="" phones(phone)=""
-			}
-		}
-	}
-	else { //???
-		do ..Send(ChatId,msg) 
-		;s phone=$lg(@..#GN@(ChatId),3)
-		;s:phone'="" phones(phone)=""
-
-	}
-	q $$$OK
-}
-
-/// ^^^w ##class(appmsw.telestat.API.test).Send(504026852,"Not recognized !!! Пример кириллицы ")
-/// w ##class(appmsw.telestat.API.test).Send(-490022521,"Пример кириллицы ")
-ClassMethod Send(chatId As %String, text As %String, obj = 0) As %Integer
-{
-	if (obj'=0) {
-		;set obj = {"remove_keyboard":true}
-		set res = ..SendMessage(chatId,text,,,,,obj)
-	} else {
-		set res = ..SendMessage(chatId,text)
-	}
-	
-	if (res.ok) {
-		return res.result."message_id"
-	}
-	return $$$ERROR($$$GeneralError, "Error while sending a message")
-}
-
 /// zwrite ##class(appmsw.telestat.API.util).TelegramSendMessage("Token","ChatId","sendMessage","Hi "_$wc($zhex("1F609")))
 ClassMethod TelegramSendMessage(botId, chatId, method, text, replyMarkup As %DynamicObject = 0) As %DynamicObject
 {
@@ -174,7 +135,7 @@ ClassMethod TelegramSendMessage(botId, chatId, method, text, replyMarkup As %Dyn
 ClassMethod GetButtons(textbuttons)
 {
 	;set button = {}
-	;if (getPhone=1) { //запрос телефона или геолокации
+	;if (getPhone=1) { //phone or geolocation request
 	;	do button.%Set("request_contact",1,"boolean") 
 	;	;do button.%Set("request_location",1,"boolean") 
 	;} 

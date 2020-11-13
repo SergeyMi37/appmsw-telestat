@@ -2,7 +2,7 @@
 ## appmsw-telestat
 [![Gitter](https://img.shields.io/badge/Available%20on-Intersystems%20Open%20Exchange-00b2a9.svg)](https://openexchange.intersystems.com/package/appmsw-telestat-1)
 
-Telegram Admin_bot manages a Informant_bot in providing content.
+Ineroperability manages a Telegram Admin_bot and Informant_bot in providing content.
 
 ## Installation with ZPM
 

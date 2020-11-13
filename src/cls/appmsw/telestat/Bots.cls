@@ -23,7 +23,13 @@ Property NameLast As %String;
 /// Date and time last change
 Property TimeStamp As %TimeStamp [ InitialExpression = {$zdt($h, 3, 1)} ];
 
-/// Allowed to info
+/// Notify
+Property Notify As %String;
+
+/// Access :Allow or Deny
+Property Access As %String;
+
+/// Access :Allow or Deny
 Property Allow As %String;
 
 /// Is Admin
@@ -37,6 +43,13 @@ Property Groups As %String(MAXLEN = "");
 
 /// Roles
 Property Roles As %String(MAXLEN = "");
+
+/// Number of commands sent
+Property NumCommSent As %Integer;
+
+Index idxNAccess On Access;
+
+Index idxNumCommSent On NumCommSent;
 
 Index idxResource On Resource;
 
@@ -74,6 +87,19 @@ ClassMethod GetObjByChatId(ChatId, token) As appmsw.telestat.Bots
 		 if tRS.ID set obj=##class(appmsw.telestat.Bots).%OpenId(tRS.ID)
 	 }
  	quit obj
+}
+
+/// Example set st=##class(appmsw.telestat.Bots).IncNumCommSent()
+ClassMethod IncNumCommSent(Token As %String = "", ChatId As %String = "", ByRef Count) As appmsw.telestat.Bots
+{
+	set obj=##class(appmsw.telestat.Bots).GetObjByChatId(Token, ChatId)
+	if $isobject(obj) {
+		set Count=obj.NumCommSent
+		set Count=Count+1
+		set obj.NumCommSent=Count
+		quit obj.%Save()
+	}
+	q $$$OK
 }
 
 /// Get object by Numer for Admin
@@ -120,41 +146,9 @@ ClassMethod GetAllow(Token As %String = "", Number As %String = "", ChatId As %S
 	If $$$ISERR(tStatus) Quit tStatus
 	Set tRS = tSt.%Execute(Token,Number,ChatId)
 	While (tRS.Next()) {
-		Set Allow = tRS.Data("Allow")
+		Set Allow = tRS.Data("Access")
 	}
 	Quit $$$OK
-}
-
-/// Example do ##class(appmsw.telestat.Bots).AddUser()
-ClassMethod AddUser(TelegramName = "", TelegramToken As %String = "", Number As %String = "", ChatId As %String = "", NameFirst As %String = "", NameLast As %String = "", Allow As %String = "", Admin = "", Resource = "")
-{
-	try {
-		Set record = ..%New()
-		Set record.TelegramName = TelegramName
-		Set record.TelegramToken = TelegramToken
-		Set record.Number = Number
-		Set record.ChatId = ChatId
-		Set record.NameFirst = NameFirst
-		Set record.NameLast = NameLast
-		Set record.Allow = Allow
-		Set record.Admin = Admin
-		Set record.Resource = Resource
-		set sc=record.%Save()
-		set:sc id=record.%Id()
-	} catch err {
-		set id=""
-	}
-	quit $g(id)
-}
-
-Query UserList() As %SQLQuery(CONTAINID = 1)
-{
-SELECT ID,NameFirst,NameLast,Number,ChatId,Resource,TimeStamp,IsAdmin,Allow FROM Bots
-}
-
-Query UserFullList() As %SQLQuery(CONTAINID = 1)
-{
-SELECT ID,NameFirst,NameLast,Number,ChatId,TelegramName,TelegramToken,Resource,TimeStamp,IsAdmin,Allow FROM Bots
 }
 
 Storage Default
@@ -198,6 +192,15 @@ Storage Default
 </Value>
 <Value name="13">
 <Value>Roles</Value>
+</Value>
+<Value name="14">
+<Value>NumCommSent</Value>
+</Value>
+<Value name="15">
+<Value>Access</Value>
+</Value>
+<Value name="16">
+<Value>Notify</Value>
 </Value>
 </Data>
 <DataLocation>^appmsw.telestat.BotsD</DataLocation>

@@ -5,15 +5,11 @@ Class appmsw.telestat.API.admin Extends appmsw.telestat.API.service
 
 ClassMethod GetMessage(token, pInput As %RegisteredObject, Output msg) As %Status
 {
-    set msg = ##class(appmsw.telestat.Msg.TextRequest).%New()
-    set ChatId = pInput.message.chat.id
-	;set $$$AppL("ADM",ChatId_"-input")=$$$AppObJs(pInput)
-    set NameFirst=pInput.message.from."first_name"
-    set NameLast=pInput.message.from."last_name"
+	d ..InitMessage(pInput,token,.msg, .ChatId,.NameFirst,.NameLast,"Admin")	
+		
 	set Text = ""
 	Try {
 		do ##class(appmsw.telestat.API.commands).GetCommandsAdmin(.cmd,ChatId,token,NameFirst,NameLast)
-		set GNtmp=..#GNtmp
 		
 		if pInput.message.text="/start" {
 			set Text = $GET(cmd)_$$$NL
@@ -40,31 +36,30 @@ ClassMethod GetMessage(token, pInput As %RegisteredObject, Output msg) As %Statu
 				set msg.Text=Text_"Response to command:"
 
 				if $GET(cmd(comm))'="" set command=$GET(cmd(comm))
-				else  set command=$GET(@GNtmp@("Command",comm))
-				if command="" set msg.Text="Error node comman" quit
+				else  set command=$GET(@..#GNtmp@("Command",ChatId,comm)) 
+				if command="" set msg.Text="Error node command" quit
 
 				Try {
-	  			  if $lg(command,3)'="" xecute "do "_$lg(command,3) //routine TODO
-	  			  else  do $classmethod($lg(command,1),$lg(command,2),.return,command,ChatId,token,NameFirst,NameLast)
+	  			  if $lg(command,5)'="" xecute "do "_$lg(command,5) //routine TODO
+	  			  else  do $classmethod($lg(command,1),$lg(command,2),$lg(command,3),.return,command,ChatId,token,NameFirst,NameLast)
 	  			  set msg.Text=Text_$GET(return)_$$$NL
 				} 
 				Catch ex {
-				   Set sc = $g(%objlasterror, $$$OK)
-				   Set sc = $$$ADDSC(sc, ex.AsStatus())
+				   ;Set sc = $g(%objlasterror, $$$OK)
+				   ;Set sc = $$$ADDSC(sc, ex.AsStatus())
 				   set msg.Text=Text_"Error "_$ZE_$$$NL
 				 }
 			}
 		}
-		elseif($e(pInput.message.text,1)="=") {  //=Allow or =Deny
+		elseif($e(pInput.message.text,1)="=") {  //=Allow or =Deny or =Notify or =Do not notify
 			if '..IsPermiss(token,ChatId) {
 				set msg.Text="You have not verified admin rights"_$$$NL
 			} else {
-				set ans=$e(pInput.message.text,2,*)
+				set buttontext=$e(pInput.message.text,2,*)
 				
 				// We use the global node to save and transfer private information between information exchange sessions
-				set gnId=$p($p(ans,"(",2),")",1) 
-				set GNtmp=..#GNtmp
-				set $lb(gh,gtoken,gChatId,gphone,gNameFirst,gNameLast)=$G(@GNtmp@("Admin",gnId))
+				set id=$p(buttontext,":",3) 
+				set $lb(gh,gtoken,gChatId,gphone,gNameFirst,gNameLast)=$G(@..#GNtmp@("Admin",id))
 				
 				if '$d(gChatId) set msg.Text="Error node " quit
 				
@@ -72,19 +67,21 @@ ClassMethod GetMessage(token, pInput As %RegisteredObject, Output msg) As %Statu
 				set ob=##class(appmsw.telestat.Bots).GetObjByNumber(gphone)
 				if '$isobject(ob)  set ob=##class(appmsw.telestat.Bots).%New()
 				set ob.ChatId=gChatId
-				set ob.NameFirst=gNameFirst
-				set ob.NameLast=gNameLast
-				set ob.TelegramToken=gtoken
+				set:gNameFirst'="" ob.NameFirst=gNameFirst
+				set:gNameLast'="" ob.NameLast=gNameLast
+				set:gtoken'="" ob.TelegramToken=gtoken
 				set ob.Roles="informer"
-				set ob.Number=gphone
-				set ob.Allow=$s($e(ans,1,3)="All":1,1:"Deny")
+				set:gphone'="" ob.Number=gphone
+				set Property=$P(buttontext,":")
+				set Value=$P(buttontext,":",2)
+				set $Property(ob,Property)=Value
 				set st=ob.%Save()
 				if st {
-					set Mess=" Admin response: "_$p(ans," ")
+					set Mess=" Admin response: "_$p(buttontext,":",1,2)
 					do ##class(appmsw.telestat.API.util).ToInformer(,gChatId,gtoken,Mess)
 				}
 				else { 
-					set Mess=" Error "_$System.Status.GetErrorText(st)_" "_ans
+					set Mess=" Error "_$System.Status.GetErrorText(st)_" "_buttontext
 				}
 				set msg.Text = msg.Text _ Mess
 			}
@@ -101,6 +98,8 @@ ClassMethod GetMessage(token, pInput As %RegisteredObject, Output msg) As %Statu
 				set obj.NameFirst=NameFirst
 				set obj.NameLast=NameLast
 				set obj.Allow=1
+				set obj.Access="Yes"
+				set obj.Notify="Yes"
 				set st=obj.%Save()
 				if st set Mess=" ОК"
 				else  set Mess=" Error "_$System.Status.GetErrorText(st)
