@@ -93,7 +93,7 @@ otherwise:
 Now ChatId is attached to the administrator's phone.
 You can test notifications to the Admin bot with a command in the terminal
 ```
-user>zwrite ##class(appm sw.telestat.API.service).ToAdmin("Contest")
+user>zwrite ##class(appmsw.telestat.API.util).ToAdmin("Contest")
 ```
 ![](https://github.com/SergeyMi37/appmsw-telestat/blob/main/doc/Screenshot_8.png)
 
@@ -107,11 +107,27 @@ The bot admin will receive a message about sending the phone, and by selecting t
 
 But even if access to information was denied, ChatId and the phone number were entered in the `appmsw.telestat.Bots` table and the bot informant can be sent a message using the utility
 ```
-zwrite ##class(appmsw.telestat.API.util).ToInformer("7971111111",,,"Hello don't be sad")
+user>zwrite ##class(appmsw.telestat.API.util).ToInformer("7971111111",,,"Hello don't be sad")
 ```
+## The configuration work has been completed and you can see what is available out of the box.
+
+For bot admin, if you enter /start
+```
+iris informer example admin
+Bot administration service for tracking Ensemble and IRIS servers. Can take commands: 
+
+/GetLastAlerts - Get last alerts. Server: 'hp-msw'
+/ServersStatus - Get a list of monitored instances
+/Userlist - Get a list of users receiving information about servers and their status
+```
+For the administrator bot, it is possible to view and edit user attributes with the `/Userlist` command
 
 ![](https://github.com/SergeyMi37/appmsw-telestat/blob/main/doc/Screenshot_4.png)
 
+Another command /GetLastAlerts is implemented more as an example.
+
 ![](https://github.com/SergeyMi37/appmsw-telestat/blob/main/doc/Screenshot_5.png)
+
+And the `appmsw.telestat.TelegramServiceAlert` service is configured to periodically check system messages and if their level of importance is more than 2, display them to all users connected to the bot informant who have the notification field set to `yes`
 
 ![](https://github.com/SergeyMi37/appmsw-telestat/blob/main/doc/Screenshot_6.png)
