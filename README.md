@@ -135,3 +135,5 @@ And the `appmsw.telestat.TelegramServiceAlert` service is configured to periodic
 The list of commands and content is expanding. It is enough to create your own class similar to `appmsw.telestat.API.commands` And a method `GetCommands` For a list of commands and `GetAlerts` To get content on them.
 
 Teams and content can be differentiated between users by groups.
+This solution has been configured and tested in `Long polling` mode. But it can be configured in `Webhook` mode too.
+SSL configuration is created automatically.
