@@ -42,16 +42,36 @@ $ docker-compose exec iris iris session iris
 
 If you do not have a Telegram messenger account, then this is just a reason to create it.
 So, let's create an administrator bot answering the questions of the Father of Bots
-![](https://github.com/SergeyMi37/appmsw-telestat/blob/main/doc/appmsw-tele.png)
-
+![](https://github.com/SergeyMi37/appmsw-telestat/blob/main/doc/Screenshot_1.png)
+Then we will create an informant bot and save their names and tokens to enter when installing the module using the package manager.
 
 Open IRIS terminal:
 
 ```
-
 USER>
 USER>zpm
 zpm:USER>install appmsw-telestat
+
+[appmsw-telestat]       Module object refreshed.
+[appmsw-telestat]       Validate START
+[appmsw-telestat]       Validate SUCCESS
+[appmsw-telestat]       Compile START
+[appmsw-telestat]       Compile SUCCESS
+[appmsw-telestat]       Activate START
+[appmsw-telestat]       Configure START
+Shall we enter names and tokens ? [y,n] <y> y
+
+Enter the username of the admin bot IrisContestAdminInformerbot 
+Enter the token to access of the admin bot 794:AAGjZjag9Yr6LzYVbRESIBqk3HIbc 
+Enter the number phone of the admin bot 77777777 [7777777]
+Enter the username of the informer bot IrisContestInformerbot [IrisContestInformerbot]
+Enter the token to access of the informer bot sY5NxkS0QXRXdjxmbrIWJWLOA 
+
+If you make a mistake, or BotFather changed the token, you can always retry later by performing a utility ##class(appmsw.telestat.API.util).Init()
+Product items changed successfully
+
+[appmsw-telestat]       Configure SUCCESS
+[appmsw-telestat]       Activate SUCCESS
 ```
 
 
