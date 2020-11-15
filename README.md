@@ -54,6 +54,10 @@ Then we will create an informant bot and save their names and tokens to enter wh
 USER>
 USER>zpm
 zpm:USER>install appmsw-telestat
+```
+Or if from docker
+```
+zpm:USER>load /opt/irisapp
 
 [appmsw-telestat]       Module object refreshed.
 [appmsw-telestat]       Validate START
