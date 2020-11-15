@@ -45,7 +45,6 @@ So, let's create an administrator bot answering the questions of the BotsFather.
 
 ![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telestat/main/doc/Screenshot_1.png)
 
-
 Then we will create an informant bot and save their names and tokens to enter when installing the module using the package manager.
 
 ### Open IRIS terminal:
@@ -83,7 +82,7 @@ Product items changed successfully
 The program memorized names, tokens and phone numbers in the table `appmsw.telestat.Bots`
 After that, we will open the product and launch it.
 
-![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telestat/blob/main/doc/Screenshot_7.png)
+![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telestat/main/doc/Screenshot_7.png)
 
 ## Configuring a bot admin
 
@@ -100,7 +99,7 @@ You can test notifications to the Admin bot with a command in the terminal
 ```
 user>zwrite ##class(appmsw.telestat.API.util).ToAdmin("Contest")
 ```
-![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telestat/blob/main/doc/Screenshot_8.png)
+![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telestat/main/doc/Screenshot_8.png)
 
 ## Configuring a bot informant
 We will find the informant in the telegram created by the bot and connect to it by pressing the `START` button.
@@ -108,7 +107,7 @@ The product service will prepare a message and also offer to show the phone numb
 
 The bot admin will receive a message about sending the phone, and by selecting the Allow or Deny buttons, you will make a decision that will come in response to the bot informant.
 
-![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telestat/blob/main/doc/Screenshot_3.png)
+![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telestat/main/doc/Screenshot_3.png)
 
 But even if access to information was denied, ChatId and the phone number were entered in the `appmsw.telestat.Bots` table and the bot informant can be sent a message using the utility
 ```
@@ -127,15 +126,15 @@ Bot administration service for tracking Ensemble and IRIS servers. Can take comm
 ```
 For the administrator bot, it is possible to view and edit user attributes with the `/Userlist` command
 
-![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telestat/blob/main/doc/Screenshot_4.png)
+![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telestat/main/doc/Screenshot_4.png)
 
 Another command /GetLastAlerts is implemented more as an example.
 
-![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telestat/blob/main/doc/Screenshot_5.png)
+![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telestat/main/doc/Screenshot_5.png)
 
 And the `appmsw.telestat.TelegramServiceAlert` service is configured to periodically check system messages and if their level of importance is more than 2, display them to all users connected to the bot informant who have the notification field set to `yes`
 
-![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telestat/blob/main/doc/Screenshot_6.png)
+![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telestat/main/doc/Screenshot_6.png)
 
 The list of commands and content is expanding. It is enough to create your own class similar to `appmsw.telestat.API.commands` And a method `GetCommands` For a list of commands and `GetAlerts` To get content on them.
 
