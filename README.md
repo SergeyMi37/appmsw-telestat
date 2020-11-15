@@ -44,6 +44,8 @@ If you do not have a Telegram messenger account, then this is just a reason to c
 So, let's create an administrator bot answering the questions of the BotsFather.
 
 ![](https://github.com/SergeyMi37/appmsw-telestat/blob/main/doc/Screenshot_1.png)
+![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telestat/main/doc/Screenshot_1.png)
+
 
 Then we will create an informant bot and save their names and tokens to enter when installing the module using the package manager.
 
