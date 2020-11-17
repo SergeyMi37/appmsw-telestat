@@ -41,7 +41,7 @@ $ docker-compose exec iris iris session iris
 ## Before starting the installation
 
 If you do not have a Telegram messenger account, then this is just a reason to create it.
-So, let's create an administrator bot answering the questions of the BotsFather.
+So, let's create an administrator bot. To do this, find BotsFather, join it and enter the /newbot command.
 
 ![](https://raw.githubusercontent.com/SergeyMi37/appmsw-telestat/main/doc/Screenshot_1.png)
 
