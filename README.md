@@ -2,9 +2,9 @@
 ## appmsw-telestat
 [![Gitter](https://img.shields.io/badge/Available%20on-Intersystems%20Open%20Exchange-00b2a9.svg)](https://openexchange.intersystems.com/package/appmsw-telestat-1)
 
-Ineroperability manages a Telegram Admin_bot and Informant_bot in providing content.
+Organization of message notification and provision of information to users of the messenger Telegam using two bots.
 
-Telestat solution based on project
+Solution based on project
 https://github.com/intersystems-community/TelegramAlerts
 
 During the installation and configuration process, we will create an informant bot and an admin bot, which will allow the informant bot to provide users with the requested content.
