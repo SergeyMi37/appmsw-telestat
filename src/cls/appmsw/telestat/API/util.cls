@@ -9,9 +9,12 @@ Parameter TELESERVER = "api.telegram.org";
 ClassMethod Init(ByRef bots) As %String
 {
  if '$D(bots) {
- 	read !,"Shall we enter names and tokens ? [y,n] <y> ",*R:5
- 	if R="-1"||("13,121,89"'[R) write !,..WriteMessInit(1) quit $$$OK
+ 	if '($p="00" || ($p["/nul")) { // current device is not terminal
+	 	read !,"Shall we enter names and tokens ? [y,n] <y> ",*R:5
+	 	if R="-1"||("13,121,89"'[R) write !,..WriteMessInit(1) quit $$$OK
+ 	}
  }
+ if '$D(bots) quit $$$ERROR($$$GeneralError,"Bots information is empty")
  do ..InitBots(.bots)
  #dim p As Ens.Config.Production
  Set p = ##class(Ens.Config.Production).%OpenId("appmsw.telestat.Production")
